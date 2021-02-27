@@ -3,6 +3,13 @@ uuid = "d1e635ca-0c37-4ef8-99ca-f764b056a3f8"
 authors = ["Ali Bagci, Pamukkale University"]
 version = "0.1.0"
 
+[deps]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Legendre = "7642852e-7f09-11e9-134e-0940411082b6"
+Nemo = "2edaba10-b0f1-5616-af89-8c11ac63239a"
+SphericalHarmonics = "c489a379-e885-57ff-9236-bd896d33c250"
+WignerSymbols = "9f57e263-0b3d-5e2e-b1be-24f2bb48858b"
+
 [compat]
 julia = "1"
 
