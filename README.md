@@ -34,5 +34,6 @@ Nemo v0.18.4 or earlier versions should be installed (from wbhart/Nemo.jl).
 Install with the new package manager via
 ```julia
 using Pkg
+Pkg.add(path="https://github.com/wbhart/Nemo.jl.git")
 Pkg.add(path="https://github.com/abagciphys/JRAF.jl.git")
 ```
