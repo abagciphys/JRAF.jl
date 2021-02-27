@@ -119,7 +119,9 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
 [[Nemo]]
 deps = ["AbstractAlgebra", "Antic_jll", "Arb_jll", "BinaryProvider", "FLINT_jll", "InteractiveUtils", "Libdl", "LinearAlgebra", "LoadFlint", "Markdown", "Pkg", "Random", "RandomExtensions", "SHA", "Test"]
-git-tree-sha1 = "458daff5e44ba1890eda15f19481b5fe9e1d7fd2"
+git-tree-sha1 = "c65c1a22b21652f9973bac0c5cef1b27c8939c25"
+repo-rev = "master"
+repo-url = "https://github.com/wbhart/Nemo.jl.git"
 uuid = "2edaba10-b0f1-5616-af89-8c11ac63239a"
 version = "0.20.0"
 
