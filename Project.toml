@@ -1,0 +1,13 @@
+name = "JRAF"
+uuid = "d1e635ca-0c37-4ef8-99ca-f764b056a3f8"
+authors = ["Ali Bagci, Pamukkale University"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
