@@ -25,7 +25,7 @@ AuxiliaryGrlm, AuxiliaryGrlp, AuxiliaryGrh
 ################# Mathematica formoat: LegendreP[n,m,type,x]
 function LegendreP(n::acb, m::acb, x::acb, t::UInt)
     z = parent(x)()
-    ccall((:acb_hypgeom_legendre_p, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, UInt, Int),
+    ccall((:acb_hypgeom_legendre_p, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, UInt, Int),
     z, n, m, x, t, parent(n).prec)
     return z
 end
@@ -71,14 +71,14 @@ function LegendrePG(n::Int, m::Int, x::acb)
     for k in lowl : upl
         res2[k - lowl + 1] = SphCB(k, n, abs(m))*(x^(n-abs(m)-2*k))
     end
-    cs = m < 0 ? RF(1) : (-1)^m #For Condon-Shortley Phases#
+    cs = m < 0 ? RF(1) : Power(-1,m) #For Condon-Shortley Phases#
     return cs * res1 * sum(res2)
 end
 ###########################################################################################################
 ################# Second kind associated Legendre polynomials
 function LegendreQ(n::acb, m::acb, x::acb, t::UInt)
     z = parent(x)()
-    ccall((:acb_hypgeom_legendre_q, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, UInt, Int),
+    ccall((:acb_hypgeom_legendre_q, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, UInt, Int),
     z, n, m, x, t, parent(n).prec)
     return z
 end
@@ -117,7 +117,7 @@ end
 ################# Associated Laguerre polynomials L_{p}^{q}(x)
 function LaguerreL(q::acb, p::acb, x::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_laguerre_l, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_hypgeom_laguerre_l, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, q, p, x, parent(x).prec)
     return z
 end
@@ -146,7 +146,7 @@ end
 ################# Complex Spherical Harmonics
 function SphericalHarmonicsY(n::UInt, m::UInt, theta::acb, phi::acb)
     z = parent(theta)()
-    ccall((:acb_hypgeom_spherical_y, :libarb), Nothing, (Ref{acb}, UInt, UInt, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_hypgeom_spherical_y, Nemo.libarb), Nothing, (Ref{acb}, UInt, UInt, Ref{acb}, Ref{acb}, Int),
     z, n, m, theta, phi, parent(theta).prec)
     return z
 end
@@ -521,7 +521,7 @@ Hypergeometric1F0(a::Real, x::Real) = Surd(1-x, a)
 ################# r = 1 -> 0F1 = 0F1/Gamma(a)
 function Hypergeometric0F1(a::acb, x::acb, r::Int)
     z = parent(x)()
-    ccall((:acb_hypgeom_0f1, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
+    ccall((:acb_hypgeom_0f1, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
     z, a, x, r, parent(x).prec)
     return z
 end
@@ -537,7 +537,7 @@ Hypergeometric0F1(a::Real, x::Real, r::Int) = Hypergeometric0F1(CF(a), CF(x), r)
 ################# (0,1) = (irregularized, regularized)
 function Hypergeometric1F1(a::acb, b::acb, x::acb, r::Int)
     z = parent(x)()
-    ccall((:acb_hypgeom_m, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
+    ccall((:acb_hypgeom_m, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
     z, a, b, x, r, parent(x).prec)
     return z
 end
@@ -550,7 +550,7 @@ Hypergeometric1F1(a::Real, b::Real, x::Real, r::Int) = Hypergeometric1F1(CF(a), 
 ############################################# HYPERGEOMETRICU #############################################(45)
 function HypergeometricU(a::acb, b::acb, x::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_u, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_hypgeom_u, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, a, b, x, parent(x).prec)
     return z
 end
@@ -573,7 +573,7 @@ end
 ############################################ HYPERGEOMETRIC2F1 ############################################(44)
 function Hypergeometric2F1(a::acb, b::acb, c::acb, x::acb, r::Int)
     z = parent(x)()
-    ccall((:acb_hypgeom_2f1, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
+    ccall((:acb_hypgeom_2f1, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
     z, a, b, c, x, r, parent(x).prec)
     return z
 end

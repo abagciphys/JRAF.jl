@@ -26,13 +26,13 @@ end
 ###########################################################################################################
 ################################################# INTEGER #################################################
 function IntegerQ(x::arb)
-    return Bool(ccall((:arb_is_int, :libarb), Cint, (Ref{arb},), x))
+    return Bool(ccall((:arb_is_int, Nemo.libarb), Cint, (Ref{arb},), x))
  end
 
 IntegerQ(x::Real) = IntegerQ(RF(x))
 
 function IntegerQ(x::acb)
-    return Bool(ccall((:acb_is_int, :libarb), Cint, (Ref{acb},), x))
+    return Bool(ccall((:acb_is_int, Nemo.libarb), Cint, (Ref{acb},), x))
  end
 
 function IntegerQ(x::Complex)
@@ -71,7 +71,7 @@ RationalQ(rtnlx...) = RationalQ.((rtnlx))
 ###########################################################################################################
 ################################################## REAL ###################################################
 function RealQ(x::acb)
-    return Bool(ccall((:acb_is_real, :libarb), Cint, (Ref{acb},), x))
+    return Bool(ccall((:acb_is_real, Nemo.libarb), Cint, (Ref{acb},), x))
  end
 
  RealQ(x::Complex) = isreal(x)
@@ -79,7 +79,7 @@ function RealQ(x::acb)
 ################################################# POSITIVE ################################################
 ################# Return `false` for x<=0 and `true` for x>0.
 function PositiveQ(x::arb)
-    return Bool(ccall((:arb_is_positive, :libarb), Cint, (Ref{arb},), x))
+    return Bool(ccall((:arb_is_positive, Nemo.libarb), Cint, (Ref{arb},), x))
  end
 
 PositiveQ(x::Real) = PositiveQ(RF(x))
@@ -89,7 +89,7 @@ PositiveQ(x::Complex) = RealQ(x) && PositiveQ(real(x))
 ############################################### NONPOSITIVE ###############################################
 ################# Return `true` for x<=0 and `false` for x>0.
 function NonpositiveQ(x::arb)
-    return Bool(ccall((:arb_is_nonpositive, :libarb), Cint, (Ref{arb},), x))
+    return Bool(ccall((:arb_is_nonpositive, Nemo.libarb), Cint, (Ref{arb},), x))
  end
 
 NonpositiveQ(x::Real) = NonpositiveQ(RF(x))
@@ -99,7 +99,7 @@ NonpositiveQ(x::Complex) = RealQ(x) && NonpositiveQ(real(x))
 ################################################# NEGATIVE ################################################
 ################# Return `false` for x>=0 and `true` for x<0.
 function NegativeQ(x::arb)
-    return Bool(ccall((:arb_is_negative, :libarb), Cint, (Ref{arb},), x))
+    return Bool(ccall((:arb_is_negative, Nemo.libarb), Cint, (Ref{arb},), x))
  end
 
 NegativeQ(x::Real) = NegativeQ(RF(x))
@@ -109,7 +109,7 @@ NegativeQ(x::Complex) = RealQ(x) && NegativeQ(real(x))
 ############################################### NONNEGATIVE ###############################################
 ################# Return `true` for x>=0 and `false` for x<0.
 function NonnegativeQ(x::arb)
-    return Bool(ccall((:arb_is_nonnegative, :libarb), Cint, (Ref{arb},), x))
+    return Bool(ccall((:arb_is_nonnegative, Nemo.libarb), Cint, (Ref{arb},), x))
  end
 
 NonnegativeQ(x::Real) = NonnegativeQ(RF(x))
@@ -118,13 +118,13 @@ NonnegativeQ(x::Complex) = RealQ(x) && NonnegativeQ(real(x))
 ###########################################################################################################
 ################################################## EQUAL ##################################################
 function EqualQ(x::arb, y::arb)
-    r = ccall((:arb_equal, :libarb), Cint, (Ref{arb}, Ref{arb}), x, y)
+    r = ccall((:arb_equal, Nemo.libarb), Cint, (Ref{arb}, Ref{arb}), x, y)
     return Bool(r)
 end
 EqualQ(x::Real, y::Real) = EqualQ(RF(x), RF(y))
 
 function EqualQ(x::acb, y::acb)
-    r = ccall((:acb_equal, :libarb), Cint, (Ref{acb}, Ref{acb}), x, y)
+    r = ccall((:acb_equal, Nemo.libarb), Cint, (Ref{acb}, Ref{acb}), x, y)
     return Bool(r)
 end
 EqualQ(x::Complex, y::Complex) = EqualQ(CF(real(x), imag(x)), CF(real(y), imag(y)))
@@ -307,12 +307,12 @@ end
 Zero(R::ArbField) = R(0)
 
 function Zero(z::arb)
-    ccall((:arb_zero, :libarb), Nothing, (Ref{arb},), z)
+    ccall((:arb_zero, Nemo.libarb), Nothing, (Ref{arb},), z)
     return z
 end
 
 function Zero(z::acb)
-    ccall((:acb_zero, :libarb), Nothing, (Ref{acb},), z)
+    ccall((:acb_zero, Nemo.libarb), Nothing, (Ref{acb},), z)
     return z
  end
  Zero(x::Number) = oftype(x,0)
@@ -320,7 +320,7 @@ function Zero(z::acb)
 
  function One(r::AcbField)
     z = acb()
-    ccall((:acb_one, :libarb), Nothing, (Ref{acb}, ), z)
+    ccall((:acb_one, Nemo.libarb), Nothing, (Ref{acb}, ), z)
     z.parent = r
     return z
   end
@@ -348,7 +348,7 @@ KroneckerDelta(x, y) = ifelse(EqualQ(x,y), One(x), zero(x))
 ################################################ ABSOLUTE #################################################(41)
 function Abs(x::arb)
     z = parent(x)()
-    ccall((:arb_abs, :libarb), Nothing, (Ref{arb}, Ref{arb}), z, x)
+    ccall((:arb_abs, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}), z, x)
     return z
 end
 
@@ -361,7 +361,7 @@ end
 
 function Abs(x::acb)
     z = acb()
-    ccall((:acb_abs, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_abs, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     z.parent = AcbField(parent(x).prec)
     return z
 end
@@ -383,7 +383,7 @@ Abs(x...) = Abs.((x))
 ################################################# MINIMUM #################################################
 function Min(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_min, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_min, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -419,7 +419,7 @@ Min(a, b, c, xs...) = ArgListOpt(Min, Min(Min(a,b),c), xs...)
 ################################################# MAXIMUM #################################################
 function Max(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_max, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_max, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -467,7 +467,7 @@ Max(a, b, c, xs...) = ArgListOpt(Max, Max(Max(a,b),c), xs...)
 ################################################# ADDITION ################################################(42)
 function Plus(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_add, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_add, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -480,7 +480,7 @@ end
 
 function Plus(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_add, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_add, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -507,7 +507,7 @@ Plus(a, b, c, xs...) = ArgListOpt(Plus, Plus(Plus(a,b),c), xs...)
 ############################################### SUBTRACTİON ###############################################
 function Subtract(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_sub, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_sub, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -520,7 +520,7 @@ end
 
 function Subtract(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_sub, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_sub, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -547,7 +547,7 @@ Subtract(a, b, c, xs...) = ArgListOpt(Subtract, Subtract(Subtract(a,b),c), xs...
 ############################################## MULTIPLICATION #############################################
 function Times(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_mul, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_mul, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -560,7 +560,7 @@ end
 
 function Times(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_mul, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_mul, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -587,7 +587,7 @@ Times(a, b, c, xs...) = ArgListOpt(Times, Times(Times(a,b),c), xs...)
 ################################################ DIVISION #################################################
 function Divide(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_div, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_div, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -600,7 +600,7 @@ end
 
 function Divide(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_div, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_div, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -626,14 +626,14 @@ Divide(a, b, c, xs...) = ArgListOpt(Divide, Divide(Divide(a,b),c), xs...)
 ################# Return the multiplicative inverse of x, i.e. 1/x
 function Divide(x::arb)
     z = parent(x)()
-    ccall((:arb_inv, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_inv, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return parent(x)(z)
 end
 Divide(x::Real) = Divide(RF(x))
 
 function Divide(x::acb)
     z = parent(x)()
-    ccall((:acb_inv, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_inv, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 Divide(x::Complex) = Divide(CF(real(x), imag(x)))
@@ -653,7 +653,7 @@ Divide(x::Complex) = Divide(CF(real(x), imag(x)))
 ################################################## POWER ##################################################(43)
 function Power(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_pow, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_pow, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -666,7 +666,7 @@ end
 
 function Power(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_pow, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_pow, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -693,7 +693,7 @@ Power(a, b, c, xs...) = ArgListOpt(Power, Power(Power(a,b),c), xs...)
 ############################################### SQUARE ROOT ###############################################
 function Sqrt(x::arb)
     z = parent(x)()
-    ccall((:arb_sqrt, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_sqrt, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -706,7 +706,7 @@ end
 
 function Sqrt(x::acb)
     z = parent(x)()
-    ccall((:acb_sqrt, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_sqrt, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -716,7 +716,7 @@ Sqrt(x::Complex) = Sqrt(CF(real(x), imag(x)))
 ################# Return 1/Sqrt(x)
 function RSqrt(x::arb)
     z = parent(x)()
-    ccall((:arb_rsqrt, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_rsqrt, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -729,7 +729,7 @@ end
 
 function RSqrt(x::acb)
     z = parent(x)()
-    ccall((:acb_rsqrt, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_rsqrt, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -738,7 +738,7 @@ RSqrt(x::Complex) = RSqrt(CF(real(x), imag(x)))
 ################################################ NTH ROOT #################################################(49)
 function Surd(x::arb, k::UInt)
     z = parent(x)()
-    ccall((:arb_root, :libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int), z, x, k, parent(x).prec)
+    ccall((:arb_root, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int), z, x, k, parent(x).prec)
     return z
 end
 Surd(x::arb, k::Int) = Surd(x, UInt(k))
@@ -753,7 +753,7 @@ Surd(x::Real, k::Int) = Surd(x, UInt(k))
 
 function Surd(x::acb, k::UInt)
     z = parent(x)()
-    ccall((:acb_root_ui, :libarb), Nothing, (Ref{acb}, Ref{acb}, UInt, Int), z, x, k, parent(x).prec)
+    ccall((:acb_root_ui, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, UInt, Int), z, x, k, parent(x).prec)
     return z
 end
 Surd(x::acb, k::Int) = Surd(x, UInt(k))
@@ -764,7 +764,7 @@ Surd(x::Complex, k::Int) = Surd(x, UInt(k))
 ################################################## HYPOT ##################################################
 function Hypot(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_hypot, :libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_hypot, Nemo.libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -778,7 +778,7 @@ end
 ################# Return Log(Sqrt(x^2 + y^3)).
 function LogHypot(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_log_hypot, :libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_log_hypot, Nemo.libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -787,7 +787,7 @@ LogHypot(x::Real, y::Real) = LogHypot(RF(x), RF(y))
 ############################################### EXPONENTIAL ###############################################
 function Exp(x::arb)
     z = parent(x)()
-    ccall((:arb_exp, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_exp, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -800,7 +800,7 @@ end
 
 function Exp(x::acb)
     z = parent(x)()
-    ccall((:acb_exp, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_exp, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -808,7 +808,7 @@ Exp(x::Complex) = Exp(CF(real(x), imag(x)))
 ################# Return Exp(x) - 1, evaluated accurately for small x.
 function Expm1(x::arb)
     z = parent(x)()
-    ccall((:arb_expm1, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_expm1, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
  end
 
@@ -821,7 +821,7 @@ end
 
 function Expm1(x::acb)
     z = parent(x)()
-    ccall((:acb_expm1, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_expm1, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
  end
  Expm1(x::Complex) = Expm1(CF(real(x), imag(x)))
@@ -829,7 +829,7 @@ function Expm1(x::acb)
 ################################################ LOGARİTHM ################################################
 function Ln(x::arb)
     z = parent(x)()
-    ccall((:arb_log, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_log, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -842,7 +842,7 @@ end
 
 function Ln(x::acb)
     z = parent(x)()
-    ccall((:acb_log, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_log, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -850,7 +850,7 @@ Ln(x::Complex) = Ln(CF(real(x), imag(x)))
 ################# Return Ln(1+x), evaluated accurately for small x.
 function Lnp1(x::arb)
     z = parent(x)()
-    ccall((:arb_log1p, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_log1p, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -863,14 +863,14 @@ end
 
 function Lnp1(x::acb)
     z = parent(x)()
-    ccall((:acb_log1p, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_log1p, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 Lnp1(x::Complex) = Lnp1(CF(real(x), imag(x)))
 ################# Log_{10}
 function Log10(r::ArbField)
     z = r()
-    ccall((:arb_const_log10, :libarb), Nothing, (Ref{arb}, Int), z, prec(r))
+    ccall((:arb_const_log10, Nemo.libarb), Nothing, (Ref{arb}, Int), z, prec(r))
     return z
 end
 
@@ -888,7 +888,7 @@ Log(x::Complex) = Divide(Ln(x), Log10(ArbField(sprec)))
 ################# Log_{b}(x), in Mathematica Log(b,x)
 function Log(x::arb, b::UInt)
     z = parent(x)()
-    ccall((:arb_log_base_ui, :libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int),
+    ccall((:arb_log_base_ui, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int),
     z, x, b, parent(x).prec)
     return z
 end
@@ -911,32 +911,32 @@ Log(x::Real, b::Real) = Log(RF(x), UInt(b))
 ###########################################################################################################
 function Pi(r::ArbField)
     z = r()
-    ccall((:arb_const_pi, :libarb), Nothing, (Ref{arb}, Int), z, prec(r))
+    ccall((:arb_const_pi, Nemo.libarb), Nothing, (Ref{arb}, Int), z, prec(r))
     return z
 end
 
 function Pi(r::AcbField)
     z = r()
-    ccall((:acb_const_pi, :libarb), Nothing, (Ref{acb}, Int), z, prec(r))
+    ccall((:acb_const_pi, Nemo.libarb), Nothing, (Ref{acb}, Int), z, prec(r))
     return z
 end
 ################# Sqrt(Pi)
 function SqrtPi(r::ArbField)
     z = r()
-    ccall((:arb_const_sqrt_pi, :libarb), Nothing, (Ref{arb}, Int), z, prec(r))
+    ccall((:arb_const_sqrt_pi, Nemo.libarb), Nothing, (Ref{arb}, Int), z, prec(r))
     return z
 end
 ################# Log(Sqrt(2Pi))
 function LogSqrt2Pi(r::ArbField)
     z = r()
-    ccall((:arb_const_log_sqrt2pi, :libarb), Nothing, (Ref{arb}, Int), z, prec(r))
+    ccall((:arb_const_log_sqrt2pi, Nemo.libarb), Nothing, (Ref{arb}, Int), z, prec(r))
     return z
 end
 ###########################################################################################################
 ################################################### SINE ##################################################(44)
 function Sin(x::arb)
     z = parent(x)()
-    ccall((:arb_sin, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_sin, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -949,7 +949,7 @@ end
 
 function Sin(x::acb)
     z = parent(x)()
-    ccall((:acb_sin, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_sin, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -957,14 +957,14 @@ Sin(x::Complex) = Sin(CF(real(x), imag(x)))
 ################# Sin(Pi*x)
 function SinPi(x::arb)
     z = parent(x)()
-    ccall((:arb_sin_pi, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_sin_pi, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 SinPi(x::Real) = SinPi(RF(x))
 
 function SinPi(x::acb)
     z = parent(x)()
-    ccall((:acb_sin_pi, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_sin_pi, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 SinPi(x::Complex) = SinPi(CF(real(x), imag(x)))
@@ -972,7 +972,7 @@ SinPi(x::Complex) = SinPi(CF(real(x), imag(x)))
 ################################################## COSINE #################################################
 function Cos(x::arb)
     z = parent(x)()
-    ccall((:arb_cos, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_cos, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
  end
 
@@ -985,7 +985,7 @@ end
 
 function Cos(x::acb)
     z = parent(x)()
-    ccall((:acb_cos, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_cos, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -993,14 +993,14 @@ Cos(x::Complex) = Cos(CF(real(x), imag(x)))
 ################# Cos(Pi*x)
 function CosPi(x::arb)
     z = parent(x)()
-    ccall((:arb_cos_pi, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_cos_pi, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 CosPi(x::Real) = CosPi(RF(x))
 
 function CosPi(x::acb)
     z = parent(x)()
-    ccall((:acb_cos_pi, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_cos_pi, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 CosPi(x::Complex) = CosPi(CF(real(x), imag(x)))
@@ -1008,7 +1008,7 @@ CosPi(x::Complex) = CosPi(CF(real(x), imag(x)))
 ################################################# TANGENT #################################################
 function Tan(x::arb)
     z = parent(x)()
-    ccall((:arb_tan, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_tan, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1021,7 +1021,7 @@ end
 
 function Tan(x::acb)
     z = parent(x)()
-    ccall((:acb_tan, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_tan, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1030,7 +1030,7 @@ Tan(x::Complex) = Tan(CF(real(x), imag(x)))
 ################################################ COTANGENT ################################################
 function Cot(x::arb)
     z = parent(x)()
-    ccall((:arb_cot, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_cot, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1043,7 +1043,7 @@ end
 
 function Cot(x::acb)
     z = parent(x)()
-    ccall((:acb_cot, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_cot, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1052,7 +1052,7 @@ Cot(x::Complex) = Cot(CF(real(x), imag(x)))
 ################################################# COSECAND ################################################
 function Csc(x::arb)
 	z = parent(x)()
-	ccall((:arb_csc, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_csc, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1065,7 +1065,7 @@ end
 
 function Csc(x::acb)
 	z = parent(x)()
-	ccall((:acb_csc, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_csc, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1074,7 +1074,7 @@ Csc(x::Complex) = Csc(CF(real(x), imag(x)))
 ################################################## SECAND #################################################
 function Sec(x::arb)
 	z = parent(x)()
-	ccall((:arb_sec, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_sec, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1087,7 +1087,7 @@ end
 
 function Sec(x::acb)
 	z = parent(x)()
-	ccall((:acb_sec, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_sec, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1102,7 +1102,7 @@ Sec(x::Complex) = Sec(CF(real(x), imag(x)))
 ################################################# ARCSINE #################################################(42)
 function ArcSin(x::arb)
 	z = parent(x)()
-	ccall((:arb_asin, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_asin, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1115,7 +1115,7 @@ end
 
 function ArcSin(x::acb)
 	z = parent(x)()
-	ccall((:acb_asin, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_asin, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1124,7 +1124,7 @@ ArcSin(x::Complex) = ArcSin(CF(real(x), imag(x)))
 ################################################ ARCCOSINE ################################################
 function ArcCos(x::arb)
 	z = parent(x)()
-	ccall((:arb_acos, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_acos, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1137,7 +1137,7 @@ end
 
 function ArcCos(x::acb)
 	z = parent(x)()
-	ccall((:acb_acos, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_acos, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1146,7 +1146,7 @@ ArcCos(x::Complex) = ArcCos(CF(real(x), imag(x)))
 ################################################ ARCTANGENT ###############################################
 function ArcTan(x::arb)
     z = parent(x)()
-    ccall((:arb_atan, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_atan, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1159,7 +1159,7 @@ end
 
 function ArcTan(x::acb)
     z = parent(x)()
-    ccall((:acb_atan, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_atan, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1167,7 +1167,7 @@ ArcTan(x::Complex) = ArcTan(CF(real(x), imag(x)))
 ################# ArcTan(y,x) = ArcTan(y/x)
 function ArcTan(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_atan2, :libarb), Nothing,
+    ccall((:arb_atan2, Nemo.libarb), Nothing,
                 (Ref{arb}, Ref{arb}, Ref{arb}, Int), z, x, y, parent(x).prec)
     return z
 end
@@ -1211,7 +1211,7 @@ ArcCot(x) = ArcTan(Divide(One(x), x))
 ############################################# HYPERBOLIC SINE #############################################(38)
 function Sinh(x::arb)
     z = parent(x)()
-    ccall((:arb_sinh, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_sinh, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1224,7 +1224,7 @@ end
 
 function Sinh(x::acb)
     z = parent(x)()
-    ccall((:acb_sinh, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_sinh, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1233,7 +1233,7 @@ Sinh(x::Complex) = Sinh(CF(real(x), imag(x)))
 ############################################ HYPERBOLIC COSINE ############################################
 function Cosh(x::arb)
     z = parent(x)()
-    ccall((:arb_cosh, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_cosh, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1246,7 +1246,7 @@ end
 
 function Cosh(x::acb)
     z = parent(x)()
-    ccall((:acb_cosh, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_cosh, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1255,7 +1255,7 @@ Cosh(x::Complex) = Cosh(CF(real(x), imag(x)))
 ############################################ HYPERBOLIC TANGENT ###########################################
 function Tanh(x::arb)
     z = parent(x)()
-    ccall((:arb_tanh, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_tanh, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1268,7 +1268,7 @@ end
 
 function Tanh(x::acb)
     z = parent(x)()
-    ccall((:acb_tanh, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_tanh, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1277,7 +1277,7 @@ Tanh(x::Complex) = Tanh(CF(real(x), imag(x)))
 ########################################### HYPERBOLIC COTANGENT ##########################################
 function Coth(x::arb)
     z = parent(x)()
-    ccall((:arb_coth, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_coth, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1290,7 +1290,7 @@ end
 
 function Coth(x::acb)
     z = parent(x)()
-    ccall((:acb_coth, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_coth, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1307,7 +1307,7 @@ Coth(x::Complex) = Coth(CF(real(x), imag(x)))
 ############################################ HYPERBOLIC ARCSINE ###########################################(37)
 function ArcSinh(x::arb)
 	z = parent(x)()
-	ccall((:arb_asinh, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_asinh, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1320,7 +1320,7 @@ end
 
 function ArcSinh(x::acb)
 	z = parent(x)()
-	ccall((:acb_asinh, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_asinh, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1329,7 +1329,7 @@ ArcSinh(x::Complex) = ArcSinh(CF(real(x), imag(x)))
 ########################################### HYPERBOLIC ARCCOSINE ##########################################
 function ArcCosh(x::arb)
 	z = parent(x)()
-	ccall((:arb_acosh, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_acosh, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1342,7 +1342,7 @@ end
 
 function ArcCosh(x::acb)
 	z = parent(x)()
-	ccall((:acb_acosh, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_acosh, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1351,7 +1351,7 @@ ArcCosh(x::Complex) = ArcCosh(CF(real(x), imag(x)))
 ########################################## HYPERBOLIC ARCTANGENT ##########################################
 function ArcTanh(x::arb)
 	z = parent(x)()
-	ccall((:arb_atanh, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+	ccall((:arb_atanh, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1365,7 +1365,7 @@ end
 
 function ArcTanh(x::acb)
 	z = parent(x)()
-	ccall((:acb_atanh, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+	ccall((:acb_atanh, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
 	return z
 end
 
@@ -1388,7 +1388,7 @@ ArcCoth(x) = ArcTanh(Divide(One(x), x))
 ################################################ FACTORİALS ###############################################
 function Factorial(n::UInt, r::ArbField)
     z = r()
-    ccall((:arb_fac_ui, :libarb), Nothing, (Ref{arb}, UInt, Int), z, n, r.prec)
+    ccall((:arb_fac_ui, Nemo.libarb), Nothing, (Ref{arb}, UInt, Int), z, n, r.prec)
     return z
 end
 Factorial(n::Int, r::ArbField) = n < 0 ? Factorial(r(n)) : Factorial(UInt(n), r)
@@ -1401,7 +1401,7 @@ Factorial(x::Complex) = Factorial(CF(real(x), imag(x)))
 ################################################## GAMMA ##################################################
 function Gamma(x::arb)
     z = parent(x)()
-    ccall((:arb_gamma, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_gamma, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1414,7 +1414,7 @@ end
 
 function Gamma(x::acb)
     z = parent(x)()
-    ccall((:acb_gamma, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_gamma, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1425,7 +1425,7 @@ Gamma(x::Complex) = Gamma(CF(real(x), imag(x)))
 ######################################### UPPER INCOMPLETE GAMMA ##########################################
 function UGamma(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_gamma_upper, :libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int, Int),
+    ccall((:arb_hypgeom_gamma_upper, Nemo.libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int, Int),
     z, x, y, 0, parent(x).prec)
     return z
 end
@@ -1439,7 +1439,7 @@ end
 
 function UGamma(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_gamma_upper, :libarb), Nothing,(Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
+    ccall((:acb_hypgeom_gamma_upper, Nemo.libarb), Nothing,(Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
     z, x, y, 0, parent(x).prec)
     return z
 end
@@ -1466,7 +1466,7 @@ UGamma(a, b, c, xs...) = ArgListOpt(UGamma, UGamma(UGamma(a,b),c), xs...)
 ######################################### LOWER INCOMPLETE GAMMA ##########################################
 function LGamma(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_gamma_lower, :libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int, Int),
+    ccall((:arb_hypgeom_gamma_lower, Nemo.libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Int, Int),
     z, x, y, 0, parent(x).prec)
     return z
 end
@@ -1474,7 +1474,7 @@ LGamma(x::Real, y::Real) = LGamma(RF(x), RF(y))
 
 function LGamma(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_gamma_lower, :libarb), Nothing,(Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
+    ccall((:acb_hypgeom_gamma_lower, Nemo.libarb), Nothing,(Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
     z, x, y, 0, parent(x).prec)
     return z
 end
@@ -1508,7 +1508,7 @@ QGamma(a, b, c, xs...) = ArgListOpt(QGamma, QGamma(QGamma(a,b),c), xs...)
 ################################################ POCHHAMMER ###############################################
 function Pochhammer(x::arb, n::UInt)
     z = parent(x)()
-    ccall((:arb_rising_ui, :libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int),
+    ccall((:arb_rising_ui, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int),
     z, x, n, parent(x).prec)
     return z
 end
@@ -1520,7 +1520,7 @@ Pochhammer(x::Real, n::Real) = Pochhammer(RF(x), RF(n))
 
 function Pochhammer(x::acb, n::UInt)
     z = parent(x)()
-    ccall((:acb_rising_ui, :libarb), Nothing, (Ref{acb}, Ref{acb}, UInt, Int),
+    ccall((:acb_rising_ui, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, UInt, Int),
     z, x, n, parent(x).prec)
     return z
 end
@@ -1550,7 +1550,7 @@ Pochhammer(x::Complex, y::Real) = Pochhammer(x, Complex(y, oftype(y,0)))
 ################# 0 < x <= 1 ! while x = 1, Beta(a,b,x) = Beta(a,b) in mathematica Beta(x,a,b)
 function Beta(a::arb, b::arb, x::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_beta_lower, :libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Ref{arb}, Int, Int),
+    ccall((:arb_hypgeom_beta_lower, Nemo.libarb), Nothing,(Ref{arb}, Ref{arb}, Ref{arb}, Ref{arb}, Int, Int),
     z, a, b, x, 0, parent(x).prec)
     return z
 end
@@ -1558,7 +1558,7 @@ Beta(a::Real, b::Real, x::Real) = Beta(RF(a), RF(b), RF(x))
 
 function Beta(a::acb, b::acb, x::acb)
     z = parent(x)()
-    ccall((:arb_hypgeom_beta_lower, :libarb), Nothing,(Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
+    ccall((:arb_hypgeom_beta_lower, Nemo.libarb), Nothing,(Ref{acb}, Ref{acb}, Ref{acb}, Ref{acb}, Int, Int),
     z, a, b, x, 0, parent(x).prec)
     return z
 end
@@ -1571,7 +1571,7 @@ Beta(a, b) = Beta(a, b, parent(a)(1))
 ################################################ BINOMIAL #################################################
 function Binomial(x::arb, n::UInt)
     z = parent(x)()
-    ccall((:arb_bin_ui, :libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int),
+    ccall((:arb_bin_ui, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, UInt, Int),
     z, x, n, parent(x).prec)
     return z
 end
@@ -1613,7 +1613,7 @@ GBinomial(x::arb, y::arb, z::arb, lim::arb) = GBinomial(NO(x), NO(y), NO(z), NO(
 ################# E1(x) = -Ei(-x)
 function ExpIntegralEi(x::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_ei, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_hypgeom_ei, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1626,7 +1626,7 @@ end
 
 function ExpIntegralEi(x::acb)
     z = parent(x)()
-    ccall((:arb_hypgeom_ei, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:arb_hypgeom_ei, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1634,7 +1634,7 @@ ExpIntegralEi(x::Complex) = ExpIntegralEi(CF(real(x), imag(x)))
 ################# E_{x}(y)
 function ExpIntegralE(x::arb, y::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_expint, :libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
+    ccall((:arb_hypgeom_expint, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Ref{arb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -1642,7 +1642,7 @@ ExpIntegralE(x::Real, y::Real) = ExpIntegralE(RF(x), RF(y))
 
 function ExpIntegralE(x::acb, y::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_expint, :libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
+    ccall((:acb_hypgeom_expint, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Ref{acb}, Int),
     z, x, y, parent(x).prec)
     return z
 end
@@ -1667,7 +1667,7 @@ ExpIntegralE(x::Complex, y::Real) = ExpIntegralE(x, Complex(y, oftype(y,0)))
 ########################################## PROBABILITY INTEGRALS ##########################################
 function Erf(x::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_erf, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_hypgeom_erf, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1680,7 +1680,7 @@ end
 
 function Erf(x::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_erf, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_hypgeom_erf, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 Erf(x::Complex) = Erf(CF(real(x), imag(x)))
@@ -1688,7 +1688,7 @@ Erf(x::Complex) = Erf(CF(real(x), imag(x)))
 ################# This function avoids catastrophic cancellation for large positive x.
 function Erfc(x::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_erfc, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_hypgeom_erfc, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 
@@ -1701,21 +1701,21 @@ end
 
 function Erfc(x::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_erfc, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_hypgeom_erfc, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 Erfc(x::Complex) = Erfc(CF(real(x), imag(x)))
 ################# Erfi(x) gives the imaginary error function -iErf(ix).
 function Erfi(x::arb)
     z = parent(x)()
-    ccall((:arb_hypgeom_erfi, :libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
+    ccall((:arb_hypgeom_erfi, Nemo.libarb), Nothing, (Ref{arb}, Ref{arb}, Int), z, x, parent(x).prec)
     return z
 end
 Erfi(x::Real) = Erfi(RF(x))
 
 function Erfi(x::acb)
     z = parent(x)()
-    ccall((:acb_hypgeom_erfi, :libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
+    ccall((:acb_hypgeom_erfi, Nemo.libarb), Nothing, (Ref{acb}, Ref{acb}, Int), z, x, parent(x).prec)
     return z
 end
 Erfi(x::Complex) = Erfi(CF(real(x), imag(x)))
