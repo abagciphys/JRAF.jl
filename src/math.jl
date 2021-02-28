@@ -234,27 +234,7 @@ function NO(x::arb)
 end
 
 function NO(x::acb)
-    x = "$x"
-    rex, imx = split("$x", "i*")[1], split("$x", "i*")[2]
-    if occursin("+/-", "$rex") == true
-        rex = split("$rex", " +/-")[1]
-        rex = split("$rex", "[")[2]
-        rex = BigFloat(rex)
-    elseif occursin(" + ", "$x") == true
-        rex = split("$rex", " + ")[1]
-        rex = BigFloat(rex)
-    else
-        rex = split("$rex", " - ")[1]
-        rex = BigFloat(rex)
-    end
-    if occursin("+/-", "$imx") == true
-        imx = split("$imx", " +/-")[1]
-        imx = split("$imx", "[")[2]
-        imx = BigFloat(imx)
-    else
-        imx = BigFloat(imx)
-    end
-    rex + im*imx
+    return NO(real(x)) + im * NO(imag(x))
 end
 
 NO(x...) = NO.((x))
