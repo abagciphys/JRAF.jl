@@ -29,11 +29,11 @@ The JRAF package will be updated periodically.
 The documentation will be available soon. 
 
 ## Installation
-Nemo v0.18.4 or earlier versions should be installed (from wbhart/Nemo.jl).
+The Legendre.jl package that used for tests must be installed separately. 
 
-Install with the new package manager via
+Install the Nemo and JRAF packages via package manager as,
 ```julia
 using Pkg
-Pkg.add(path="https://github.com/wbhart/Nemo.jl.git")
+Pkg.add(path="https://github.com/Nemocas/Nemo.jl.git")
 Pkg.add(path="https://github.com/abagciphys/JRAF.jl.git")
 ```
