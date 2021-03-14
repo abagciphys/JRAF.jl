@@ -20,7 +20,7 @@ The radial part of Slater-type orbitals and Slater-type spinor orbitals can be f
 
 See "angular_coefficients.jl" file for the angular momentum coefficients related with product of two spherical harmonics located on different centers, the Clebsch-Gordan and Gaunt coefficients.
 
-See "gaux_p12_bsrep.jl", "gaux_p123_bsrep.jl", "gaux_p123_rec.jl" files finally for the details on relativistic molecular auxiliary functions.
+See "gaux_p12_bsrep.jl", "gaux_p123_bsrep.jl", "gaux_p123_rec.jl" and "cgaux_p123_num.jl" files finally for the details on the analytical and numerical evaluation through "Cuba" multidimensional numerical integration library for relativistic molecular auxiliary functions, respectively. The numerical integration approximation is just for comparison. Hiğhly accurate calculation is possible for now only via analytical method. 
 
 For now, in the JRAF package we focused on computation of the non-relativsitic two-center one-electron overlap, nuclear attraction and kinetic energy integrals over the real spherical harmonics. The details are in "sto_mol_integ_one_elect.jl". file.
 

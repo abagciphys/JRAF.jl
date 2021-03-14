@@ -1,6 +1,7 @@
 module JRAF
 
     using Nemo
+    using Cuba
     using WignerSymbols
     using Legendre
     using SphericalHarmonics
@@ -21,6 +22,7 @@ module JRAF
     include("gaux_p12_bsrep.jl")
     include("gaux_p123_bsrep.jl")
     include("gaux_p123_rec.jl")
+    include("cgaux_p123_num.jl")
     include("sto_mol_integ_one_elect.jl")
 
 end
