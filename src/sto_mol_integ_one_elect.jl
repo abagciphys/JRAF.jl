@@ -84,6 +84,14 @@ function TwoCenterOverlapRec(n1::arb, l1::Int, n2::arb, l2::Int, λ::Int, ρ::ar
     return SlaterON(n1, n2, ρ, τ)*OverlapRec
 end
 ###########################################################################################################
+function TwoCenterOverlap(
+    n1::arb, l1::Int, ζ1::arb,
+    n2::arb, l2::Int, ζ2::arb,
+    λ::Int, R::arb, lim::Int)
+
+    TwoCenterOverlap(n1, l1, n2, l2, λ, (R//2)*(ζ1+ζ2), (ζ1-ζ2)//(ζ1+ζ2), lim)
+end
+
 function CTwoCenterOverlap(
     n1::arb, l1::Int, ζ1::arb,
     n2::arb, l2::Int, ζ2::arb,
@@ -358,7 +366,7 @@ function CTwoCenterNucAttractAAB(
                 sresaab1 = Sqrt(2 * s1 + 1)
                 sresaab2 = GauntGF(l1, λ, l2, λ, s1)
                 sresaab3 = SphPCG(s3, s2, 0, s1, 0, 0, 0, 0)
-                sresaab4 = CuhreAuxiliaryG(RF(10//10), s3, n1 + n2 - s2 - 1, n2z, RF(10//10), ρ, ρ, lim)
+                sresaab4 = CuhreAuxiliaryG(RF(10//10), s3, n1 + n2 - s2 - 1, n2z, RF(10//10), ρ, ρ, lim)[1]
                 sresaab += sresaab1 * sresaab2 * sresaab3 * sresaab4
             end
         end
@@ -386,7 +394,7 @@ function VTwoCenterNucAttractAAB(
                 sresaab1 = Sqrt(2 * s1 + 1)
                 sresaab2 = GauntGF(l1, λ, l2, λ, s1)
                 sresaab3 = SphPCG(s3, s2, 0, s1, 0, 0, 0, 0)
-                sresaab4 = VegasAuxiliaryG(RF(10//10), s3, n1 + n2 - s2 - 1, n2z, RF(10//10), ρ, ρ, lim)
+                sresaab4 = VegasAuxiliaryG(RF(10//10), s3, n1 + n2 - s2 - 1, n2z, RF(10//10), ρ, ρ, lim)[1]
                 sresaab += sresaab1 * sresaab2 * sresaab3 * sresaab4
             end
         end
@@ -414,7 +422,7 @@ function STwoCenterNucAttractAAB(
                 sresaab1 = Sqrt(2 * s1 + 1)
                 sresaab2 = GauntGF(l1, λ, l2, λ, s1)
                 sresaab3 = SphPCG(s3, s2, 0, s1, 0, 0, 0, 0)
-                sresaab4 = SuaveAuxiliaryG(RF(10//10), s3, n1 + n2 - s2 - 1, n2z, RF(10//10), ρ, ρ, lim)
+                sresaab4 = SuaveAuxiliaryG(RF(10//10), s3, n1 + n2 - s2 - 1, n2z, RF(10//10), ρ, ρ, lim)[1]
                 sresaab += sresaab1 * sresaab2 * sresaab3 * sresaab4
             end
         end
@@ -478,6 +486,39 @@ end
 ###########################################################################################################
 ################################# TWO CENTER KINETIC ENERGY INTEGRALS #####################################(43)
 ################################################### ALIGNED MOLECULAR COORDINATE SYSTEM
+###########################################################################################################
+###########################################################################################################
+###########################################################################################################
+################################# TWO CENTER KINETIC ENERGY INTEGRALS #####################################(43)
+################################################### ALIGNED MOLECULAR COORDINATE SYSTEM
+#function  TwoCenterKinEnergy(
+#    n1::arb, l1::Int, ζ1::arb,
+#    n2::arb, l2::Int, ζ2::arb,
+#    λ::Int, R::arb, lim::Int
+#    )
+
+#    ρ = (R // 2) * (ζ1 + ζ2)
+#    τ = (ζ1 - ζ2) // (ζ1 + ζ2)
+    
+#    coeff1 = -Power(ζ2, 2) // 2
+#    coeff2 = 4 * n2 * Sqrt(Gamma(2*n2 - 1) // Gamma(2*n2 + 1))
+
+#    res = coeff1 * (
+#        TwoCenterOverlap(n1, l1, ζ1, n2, l2, ζ2, λ, R, lim) - 
+#        coeff2 * TwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim) +
+#     	if 2 * n2 - 3 < 0
+#	0
+#    else
+#        coeff3 = 4* (n2 + l2) * (n2 - l2 - 1) * Sqrt(Gamma(2*n2 - 3) // Gamma(2*n2 + 1))
+#        overlap3 = TwoCenterOverlap(n1, l1, ζ1, n2 - 2, l2, ζ2, λ, R, lim)
+#        coeff3 * overlap3
+#    end
+#    )
+
+#    return res
+
+#end
+
 function  TwoCenterKinEnergy(
     n1::arb, l1::Int, ζ1::arb,
     n2::arb, l2::Int, ζ2::arb,
@@ -490,6 +531,14 @@ function  TwoCenterKinEnergy(
     coeff1 = -Power(ζ2, 2) // 2
     coeff2 = 4 * n2 * Sqrt(Gamma(2*n2 - 1) // Gamma(2*n2 + 1))
 
+#    if 2 * n2 - 3 < 0 || l2 > n2 - 2
+#        coeff3 = 0
+#        overlap3 = 0
+#    else
+#        coeff3 = 4* (n2 + l2) * (n2 - l2 - 1) * Sqrt(Gamma(2*n2 - 3) // Gamma(2*n2 + 1))
+#        overlap3 = TwoCenterOverlap(n1, l1, ζ1, n2 - 2, l2, ζ2, λ, R, lim)
+#    end
+
     if 2 * n2 - 3 < 0
         coeff3 = 0
         overlap3 = 0
@@ -500,6 +549,11 @@ function  TwoCenterKinEnergy(
 
     overlap1 = TwoCenterOverlap(n1, l1, ζ1, n2, l2, ζ2, λ, R, lim)
     overlap2 = TwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+    #if l2 > n2-1
+    #    overlap2 = 0
+    #else
+    #    overlap2 = TwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+    #end
 
     res = coeff1 * (
         overlap1 - coeff2 * overlap2 + coeff3 * overlap3
@@ -521,6 +575,14 @@ function  CTwoCenterKinEnergy(
     coeff1 = -Power(ζ2, 2) // 2
     coeff2 = 4 * n2 * Sqrt(Gamma(2*n2 - 1) // Gamma(2*n2 + 1))
 
+#    if 2 * n2 - 3 < 0 || l2 > n2 - 2
+#        coeff3 = 0
+#        overlap3 = 0
+#    else
+#        coeff3 = 4* (n2 + l2) * (n2 - l2 - 1) * Sqrt(Gamma(2*n2 - 3) // Gamma(2*n2 + 1))
+#        overlap3 = CTwoCenterOverlap(n1, l1, ζ1, n2 - 2, l2, ζ2, λ, R, lim)
+#    end
+
     if 2 * n2 - 3 < 0
         coeff3 = 0
         overlap3 = 0
@@ -531,6 +593,11 @@ function  CTwoCenterKinEnergy(
 
     overlap1 = CTwoCenterOverlap(n1, l1, ζ1, n2, l2, ζ2, λ, R, lim)
     overlap2 = CTwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+    #if l2 > n2-1
+    #    overlap2 = 0
+    #else
+    #    overlap2 = CTwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+    #end
 
     res = coeff1 * (
         overlap1 - coeff2 * overlap2 + coeff3 * overlap3
@@ -552,6 +619,14 @@ function  VTwoCenterKinEnergy(
     coeff1 = -Power(ζ2, 2) // 2
     coeff2 = 4 * n2 * Sqrt(Gamma(2*n2 - 1) // Gamma(2*n2 + 1))
 
+    #    if 2 * n2 - 3 < 0 || l2 > n2 - 2
+    #        coeff3 = 0
+    #        overlap3 = 0
+    #    else
+    #        coeff3 = 4* (n2 + l2) * (n2 - l2 - 1) * Sqrt(Gamma(2*n2 - 3) // Gamma(2*n2 + 1))
+    #        overlap3 = VTwoCenterOverlap(n1, l1, ζ1, n2 - 2, l2, ζ2, λ, R, lim)
+    #    end
+
     if 2 * n2 - 3 < 0
         coeff3 = 0
         overlap3 = 0
@@ -562,6 +637,12 @@ function  VTwoCenterKinEnergy(
 
     overlap1 = VTwoCenterOverlap(n1, l1, ζ1, n2, l2, ζ2, λ, R, lim)
     overlap2 = VTwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+
+    #if l2 > n2-1
+    #    overlap2 = 0
+    #else
+    #    overlap2 = VTwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+    #end
 
     res = coeff1 * (
         overlap1 - coeff2 * overlap2 + coeff3 * overlap3
@@ -583,6 +664,14 @@ function  STwoCenterKinEnergy(
     coeff1 = -Power(ζ2, 2) // 2
     coeff2 = 4 * n2 * Sqrt(Gamma(2*n2 - 1) // Gamma(2*n2 + 1))
 
+    #    if 2 * n2 - 3 < 0 || l2 > n2 - 2
+    #        coeff3 = 0
+    #        overlap3 = 0
+    #    else
+    #        coeff3 = 4* (n2 + l2) * (n2 - l2 - 1) * Sqrt(Gamma(2*n2 - 3) // Gamma(2*n2 + 1))
+    #        overlap3 = STwoCenterOverlap(n1, l1, ζ1, n2 - 2, l2, ζ2, λ, R, lim)
+    #    end
+
     if 2 * n2 - 3 < 0
         coeff3 = 0
         overlap3 = 0
@@ -593,6 +682,12 @@ function  STwoCenterKinEnergy(
 
     overlap1 = STwoCenterOverlap(n1, l1, ζ1, n2, l2, ζ2, λ, R, lim)
     overlap2 = STwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+
+    #if l2 > n2-1
+    #    overlap2 = 0
+    #else
+    #    overlap2 = STwoCenterOverlap(n1, l1, ζ1, n2 - 1, l2, ζ2, λ, R, lim)
+    #end
 
     res = coeff1 * (
         overlap1 - coeff2 * overlap2 + coeff3 * overlap3
