@@ -53,7 +53,7 @@ git-tree-sha1 = "a431f5f2ca3f4feef3bd7a5e94b8b8d4f2f647a0"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
 version = "1.2.0"
 
-[[Legendre]]
+[[AssociatedLegendrePolynomials]]
 git-tree-sha1 = "870bc47e5c717b5f441e353e62baadcd245474ee"
 repo-rev = "master"
 repo-url = "https://github.com/jmert/AssociatedLegendrePolynomials.jl"
