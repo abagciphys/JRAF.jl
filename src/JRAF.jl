@@ -1,19 +1,21 @@
 module JRAF
 
-    using Nemo
-    using Cuba
-    using WignerSymbols
-    using AssociatedLegendrePolynomials
-    using SphericalHarmonics
-    using Base.Threads
-    using DelimitedFiles
-    # export JULIA_NUM_THREADS=8
-    sprec = 750;
-    ARBF = ArbField(sprec);
-    ACBF = AcbField(sprec);
-    CF = ComplexField(sprec);
-    RF = RealField(sprec);
-    export sprec, RF, CF, Plm, Nlm, computeYlm, SphericalHarmonics
+using Nemo
+using Cuba
+using WignerSymbols
+using AssociatedLegendrePolynomials
+using SphericalHarmonics
+using Base.Threads
+using DelimitedFiles
+# export JULIA_NUM_THREADS=8
+sprec = 750;
+ARBF = ArbField(sprec);
+ACBF = AcbField(sprec);
+ComplexField(prec::Int) = AcbField(prec);
+CF = ComplexField(sprec);
+RealField(prec::Int) = ArbField(prec);
+RF = RealField(sprec);
+export sprec, RF, CF, Plm, Nlm, computeYlm, SphericalHarmonics
 
     include("math.jl")
     include("angular_coefficients.jl")
