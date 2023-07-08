@@ -3,7 +3,7 @@ module JRAF
     using Nemo
     using Cuba
     using WignerSymbols
-    using Legendre
+    using AssociatedLegendrePolynomials
     using SphericalHarmonics
     using Base.Threads
     using DelimitedFiles
