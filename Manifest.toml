@@ -56,9 +56,9 @@ version = "1.2.0"
 [[Legendre]]
 git-tree-sha1 = "870bc47e5c717b5f441e353e62baadcd245474ee"
 repo-rev = "master"
-repo-url = "https://github.com/jmert/Legendre.jl"
+repo-url = "https://github.com/jmert/AssociatedLegendrePolynomials.jl"
 uuid = "7642852e-7f09-11e9-134e-0940411082b6"
-version = "0.2.1"
+version = "1.0.1"
 
 [[LibGit2]]
 deps = ["Printf"]
