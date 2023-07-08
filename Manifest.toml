@@ -78,6 +78,10 @@ uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
+[[Nemo]]
+deps = ["Pkg"]
+uuid = "2edaba10-b0f1-5616-af89-8c11ac63239a"
+
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
